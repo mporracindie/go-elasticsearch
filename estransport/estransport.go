@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/go-elasticsearch/v6/internal/version"
+	//"github.com/elastic/go-elasticsearch/internal/version"
 )
 
 // Version returns the package version as a string.
 //
-const Version = version.Client
+const Version = "6.8.2-SNAPSHOT"
 
 var (
 	userAgent   string

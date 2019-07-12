@@ -8,9 +8,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/elastic/go-elasticsearch/v6/esapi"
-	"github.com/elastic/go-elasticsearch/v6/estransport"
-	"github.com/elastic/go-elasticsearch/v6/internal/version"
+	"github.com/elastic/go-elasticsearch/esapi"
+	"github.com/elastic/go-elasticsearch/estransport"
+	//"github.com/elastic/go-elasticsearch/internal/version"
 )
 
 const (
@@ -19,7 +19,7 @@ const (
 
 // Version returns the package version as a string.
 //
-const Version = version.Client
+const Version = "6.8.2-SNAPSHOT"
 
 // Config represents the client configuration.
 //
