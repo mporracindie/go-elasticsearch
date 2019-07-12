@@ -13,9 +13,9 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/elastic/go-elasticsearch/v6"
-	"github.com/elastic/go-elasticsearch/v6/esapi"
-	"github.com/elastic/go-elasticsearch/v6/estransport"
+	"github.com/mporracindie/go-elasticsearch/v6"
+	"github.com/mporracindie/go-elasticsearch/v6/esapi"
+	"github.com/mporracindie/go-elasticsearch/v6/estransport"
 )
 
 const port = "9209"

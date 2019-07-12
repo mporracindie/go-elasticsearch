@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/elastic/go-elasticsearch/v6/esutil"
+	"github.com/mporracindie/go-elasticsearch/v6/esutil"
 )
 
 var _ = fmt.Print

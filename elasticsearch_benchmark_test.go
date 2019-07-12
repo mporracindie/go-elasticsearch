@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/elastic/go-elasticsearch/v6"
-	"github.com/elastic/go-elasticsearch/v6/esapi"
+	"github.com/mporracindie/go-elasticsearch/v6"
+	"github.com/mporracindie/go-elasticsearch/v6/esapi"
 )
 
 var defaultResponse = http.Response{

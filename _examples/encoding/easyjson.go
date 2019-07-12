@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/go-elasticsearch/v6"
-	"github.com/elastic/go-elasticsearch/v6/esapi"
+	"github.com/mporracindie/go-elasticsearch/v6"
+	"github.com/mporracindie/go-elasticsearch/v6/esapi"
 	"github.com/fatih/color"
 	"github.com/mailru/easyjson"
 
-	"github.com/elastic/go-elasticsearch/v6/_examples/encoding/model"
+	"github.com/mporracindie/go-elasticsearch/v6/_examples/encoding/model"
 )
 
 var (

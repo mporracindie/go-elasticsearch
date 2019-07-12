@@ -40,6 +40,6 @@ Call the Elasticsearch APIs by invoking the corresponding methods on the client:
 
 		log.Println(res)
 
-See the github.com/elastic/go-elasticsearch/esapi package for more information and examples.
+See the github.com/mporracindie/go-elasticsearch/esapi package for more information and examples.
 */
 package elasticsearch
