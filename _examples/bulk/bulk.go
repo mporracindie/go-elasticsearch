@@ -26,8 +26,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/elastic/go-elasticsearch/v6"
+	"github.com/elastic/go-elasticsearch/v6/esapi"
 )
 
 type Article struct {
@@ -153,7 +153,7 @@ func main() {
 
 		// Prepare the metadata payload
 		//
-		meta := []byte(fmt.Sprintf(`{ "index" : { "_id" : "%d" } }%s`, a.ID, "\n"))
+		meta := []byte(fmt.Sprintf(`{ "index" : { "_id" : "%d", "_type" : "doc" } }%s`, a.ID, "\n"))
 		// fmt.Printf("%s", meta) // <-- Uncomment to see the payload
 
 		// Prepare the data payload: encode article to JSON

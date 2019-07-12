@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -33,7 +33,8 @@ type Search func(o ...func(*SearchRequest)) (*Response, error)
 // SearchRequest configures the Search API request.
 //
 type SearchRequest struct {
-	Index []string
+	Index        []string
+	DocumentType []string
 
 	Body io.Reader
 
@@ -42,7 +43,6 @@ type SearchRequest struct {
 	Analyzer                   string
 	AnalyzeWildcard            *bool
 	BatchedReduceSize          *int
-	CcsMinimizeRoundtrips      *bool
 	DefaultOperator            string
 	Df                         string
 	DocvalueFields             []string
@@ -101,10 +101,14 @@ func (r SearchRequest) Do(ctx context.Context, transport Transport) (*Response, 
 
 	method = "GET"
 
-	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_search"))
+	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len(strings.Join(r.DocumentType, ",")) + 1 + len("_search"))
 	if len(r.Index) > 0 {
 		path.WriteString("/")
 		path.WriteString(strings.Join(r.Index, ","))
+	}
+	if len(r.DocumentType) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.DocumentType, ","))
 	}
 	path.WriteString("/")
 	path.WriteString("_search")
@@ -129,10 +133,6 @@ func (r SearchRequest) Do(ctx context.Context, transport Transport) (*Response, 
 
 	if r.BatchedReduceSize != nil {
 		params["batched_reduce_size"] = strconv.FormatInt(int64(*r.BatchedReduceSize), 10)
-	}
-
-	if r.CcsMinimizeRoundtrips != nil {
-		params["ccs_minimize_roundtrips"] = strconv.FormatBool(*r.CcsMinimizeRoundtrips)
 	}
 
 	if r.DefaultOperator != "" {
@@ -363,6 +363,14 @@ func (f Search) WithIndex(v ...string) func(*SearchRequest) {
 	}
 }
 
+// WithDocumentType - a list of document types to search; leave empty to perform the operation on all types.
+//
+func (f Search) WithDocumentType(v ...string) func(*SearchRequest) {
+	return func(r *SearchRequest) {
+		r.DocumentType = v
+	}
+}
+
 // WithAllowNoIndices - whether to ignore if a wildcard indices expression resolves into no concrete indices. (this includes `_all` string or when no indices have been specified).
 //
 func (f Search) WithAllowNoIndices(v bool) func(*SearchRequest) {
@@ -400,14 +408,6 @@ func (f Search) WithAnalyzeWildcard(v bool) func(*SearchRequest) {
 func (f Search) WithBatchedReduceSize(v int) func(*SearchRequest) {
 	return func(r *SearchRequest) {
 		r.BatchedReduceSize = &v
-	}
-}
-
-// WithCcsMinimizeRoundtrips - indicates whether network round-trips should be minimized as part of cross-cluster search requests execution.
-//
-func (f Search) WithCcsMinimizeRoundtrips(v bool) func(*SearchRequest) {
-	return func(r *SearchRequest) {
-		r.CcsMinimizeRoundtrips = &v
 	}
 }
 
@@ -483,7 +483,7 @@ func (f Search) WithLenient(v bool) func(*SearchRequest) {
 	}
 }
 
-// WithMaxConcurrentShardRequests - the number of concurrent shard requests per node this search executes concurrently. this value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
+// WithMaxConcurrentShardRequests - the number of concurrent shard requests this search executes concurrently. this value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
 //
 func (f Search) WithMaxConcurrentShardRequests(v int) func(*SearchRequest) {
 	return func(r *SearchRequest) {
@@ -523,7 +523,7 @@ func (f Search) WithRequestCache(v bool) func(*SearchRequest) {
 	}
 }
 
-// WithRestTotalHitsAsInt - indicates whether hits.total should be rendered as an integer or an object in the rest search response.
+// WithRestTotalHitsAsInt - this parameter is ignored in this version. it is used in the next major version to control whether the rest response should render the total.hits as an object or a number.
 //
 func (f Search) WithRestTotalHitsAsInt(v bool) func(*SearchRequest) {
 	return func(r *SearchRequest) {

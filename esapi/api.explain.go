@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -42,6 +42,7 @@ type ExplainRequest struct {
 	DefaultOperator string
 	Df              string
 	Lenient         *bool
+	Parent          string
 	Preference      string
 	Query           string
 	Routing         string
@@ -78,10 +79,8 @@ func (r ExplainRequest) Do(ctx context.Context, transport Transport) (*Response,
 	path.Grow(1 + len(r.Index) + 1 + len(r.DocumentType) + 1 + len(r.DocumentID) + 1 + len("_explain"))
 	path.WriteString("/")
 	path.WriteString(r.Index)
-	if r.DocumentType != "" {
-		path.WriteString("/")
-		path.WriteString(r.DocumentType)
-	}
+	path.WriteString("/")
+	path.WriteString(r.DocumentType)
 	path.WriteString("/")
 	path.WriteString(r.DocumentID)
 	path.WriteString("/")
@@ -107,6 +106,10 @@ func (r ExplainRequest) Do(ctx context.Context, transport Transport) (*Response,
 
 	if r.Lenient != nil {
 		params["lenient"] = strconv.FormatBool(*r.Lenient)
+	}
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
 	}
 
 	if r.Preference != "" {
@@ -258,6 +261,14 @@ func (f Explain) WithDf(v string) func(*ExplainRequest) {
 func (f Explain) WithLenient(v bool) func(*ExplainRequest) {
 	return func(r *ExplainRequest) {
 		r.Lenient = &v
+	}
+}
+
+// WithParent - the ID of the parent document.
+//
+func (f Explain) WithParent(v string) func(*ExplainRequest) {
+	return func(r *ExplainRequest) {
+		r.Parent = v
 	}
 }
 

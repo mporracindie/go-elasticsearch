@@ -8,9 +8,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"github.com/elastic/go-elasticsearch/v8/estransport"
-	"github.com/elastic/go-elasticsearch/v8/internal/version"
+	"github.com/elastic/go-elasticsearch/v6/esapi"
+	"github.com/elastic/go-elasticsearch/v6/estransport"
+	"github.com/elastic/go-elasticsearch/v6/internal/version"
 )
 
 const (

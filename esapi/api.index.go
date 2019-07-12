@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -41,6 +41,7 @@ type IndexRequest struct {
 	IfPrimaryTerm       *int
 	IfSeqNo             *int
 	OpType              string
+	Parent              string
 	Pipeline            string
 	Refresh             string
 	Routing             string
@@ -100,6 +101,10 @@ func (r IndexRequest) Do(ctx context.Context, transport Transport) (*Response, e
 
 	if r.OpType != "" {
 		params["op_type"] = r.OpType
+	}
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
 	}
 
 	if r.Pipeline != "" {
@@ -235,6 +240,14 @@ func (f Index) WithIfSeqNo(v int) func(*IndexRequest) {
 func (f Index) WithOpType(v string) func(*IndexRequest) {
 	return func(r *IndexRequest) {
 		r.OpType = v
+	}
+}
+
+// WithParent - ID of the parent document.
+//
+func (f Index) WithParent(v string) func(*IndexRequest) {
+	return func(r *IndexRequest) {
+		r.Parent = v
 	}
 }
 

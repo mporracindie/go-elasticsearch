@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -36,10 +36,8 @@ type Reindex func(body io.Reader, o ...func(*ReindexRequest)) (*Response, error)
 type ReindexRequest struct {
 	Body io.Reader
 
-	MaxDocs             *int
 	Refresh             *bool
 	RequestsPerSecond   *int
-	Scroll              time.Duration
 	Slices              *int
 	Timeout             time.Duration
 	WaitForActiveShards string
@@ -71,20 +69,12 @@ func (r ReindexRequest) Do(ctx context.Context, transport Transport) (*Response,
 
 	params = make(map[string]string)
 
-	if r.MaxDocs != nil {
-		params["max_docs"] = strconv.FormatInt(int64(*r.MaxDocs), 10)
-	}
-
 	if r.Refresh != nil {
 		params["refresh"] = strconv.FormatBool(*r.Refresh)
 	}
 
 	if r.RequestsPerSecond != nil {
 		params["requests_per_second"] = strconv.FormatInt(int64(*r.RequestsPerSecond), 10)
-	}
-
-	if r.Scroll != 0 {
-		params["scroll"] = formatDuration(r.Scroll)
 	}
 
 	if r.Slices != nil {
@@ -171,14 +161,6 @@ func (f Reindex) WithContext(v context.Context) func(*ReindexRequest) {
 	}
 }
 
-// WithMaxDocs - maximum number of documents to process (default: all documents).
-//
-func (f Reindex) WithMaxDocs(v int) func(*ReindexRequest) {
-	return func(r *ReindexRequest) {
-		r.MaxDocs = &v
-	}
-}
-
 // WithRefresh - should the effected indexes be refreshed?.
 //
 func (f Reindex) WithRefresh(v bool) func(*ReindexRequest) {
@@ -192,14 +174,6 @@ func (f Reindex) WithRefresh(v bool) func(*ReindexRequest) {
 func (f Reindex) WithRequestsPerSecond(v int) func(*ReindexRequest) {
 	return func(r *ReindexRequest) {
 		r.RequestsPerSecond = &v
-	}
-}
-
-// WithScroll - control how long to keep the search context alive.
-//
-func (f Reindex) WithScroll(v time.Duration) func(*ReindexRequest) {
-	return func(r *ReindexRequest) {
-		r.Scroll = v
 	}
 }
 

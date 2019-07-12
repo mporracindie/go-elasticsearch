@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -34,11 +34,13 @@ type IndicesClearCacheRequest struct {
 
 	AllowNoIndices    *bool
 	ExpandWildcards   string
+	FieldData         *bool
 	Fielddata         *bool
 	Fields            []string
 	IgnoreUnavailable *bool
 	Query             *bool
 	Request           *bool
+	RequestCache      *bool
 
 	Pretty     bool
 	Human      bool
@@ -81,6 +83,10 @@ func (r IndicesClearCacheRequest) Do(ctx context.Context, transport Transport) (
 		params["expand_wildcards"] = r.ExpandWildcards
 	}
 
+	if r.FieldData != nil {
+		params["field_data"] = strconv.FormatBool(*r.FieldData)
+	}
+
 	if r.Fielddata != nil {
 		params["fielddata"] = strconv.FormatBool(*r.Fielddata)
 	}
@@ -103,6 +109,10 @@ func (r IndicesClearCacheRequest) Do(ctx context.Context, transport Transport) (
 
 	if r.Request != nil {
 		params["request"] = strconv.FormatBool(*r.Request)
+	}
+
+	if r.RequestCache != nil {
+		params["request_cache"] = strconv.FormatBool(*r.RequestCache)
 	}
 
 	if r.Pretty {
@@ -193,6 +203,14 @@ func (f IndicesClearCache) WithExpandWildcards(v string) func(*IndicesClearCache
 	}
 }
 
+// WithFieldData - clear field data. this is deprecated. prefer `fielddata`..
+//
+func (f IndicesClearCache) WithFieldData(v bool) func(*IndicesClearCacheRequest) {
+	return func(r *IndicesClearCacheRequest) {
+		r.FieldData = &v
+	}
+}
+
 // WithFielddata - clear field data.
 //
 func (f IndicesClearCache) WithFielddata(v bool) func(*IndicesClearCacheRequest) {
@@ -230,6 +248,14 @@ func (f IndicesClearCache) WithQuery(v bool) func(*IndicesClearCacheRequest) {
 func (f IndicesClearCache) WithRequest(v bool) func(*IndicesClearCacheRequest) {
 	return func(r *IndicesClearCacheRequest) {
 		r.Request = &v
+	}
+}
+
+// WithRequestCache - clear request cache.
+//
+func (f IndicesClearCache) WithRequestCache(v bool) func(*IndicesClearCacheRequest) {
+	return func(r *IndicesClearCacheRequest) {
+		r.RequestCache = &v
 	}
 }
 

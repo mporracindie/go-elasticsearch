@@ -1,9 +1,10 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
 import (
 	"context"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -32,11 +33,12 @@ type FieldCaps func(o ...func(*FieldCapsRequest)) (*Response, error)
 type FieldCapsRequest struct {
 	Index []string
 
+	Body io.Reader
+
 	AllowNoIndices    *bool
 	ExpandWildcards   string
 	Fields            []string
 	IgnoreUnavailable *bool
-	IncludeUnmapped   *bool
 
 	Pretty     bool
 	Human      bool
@@ -85,10 +87,6 @@ func (r FieldCapsRequest) Do(ctx context.Context, transport Transport) (*Respons
 		params["ignore_unavailable"] = strconv.FormatBool(*r.IgnoreUnavailable)
 	}
 
-	if r.IncludeUnmapped != nil {
-		params["include_unmapped"] = strconv.FormatBool(*r.IncludeUnmapped)
-	}
-
 	if r.Pretty {
 		params["pretty"] = "true"
 	}
@@ -105,7 +103,7 @@ func (r FieldCapsRequest) Do(ctx context.Context, transport Transport) (*Respons
 		params["filter_path"] = strings.Join(r.FilterPath, ",")
 	}
 
-	req, _ := newRequest(method, path.String(), nil)
+	req, _ := newRequest(method, path.String(), r.Body)
 
 	if len(params) > 0 {
 		q := req.URL.Query()
@@ -113,6 +111,10 @@ func (r FieldCapsRequest) Do(ctx context.Context, transport Transport) (*Respons
 			q.Set(k, v)
 		}
 		req.URL.RawQuery = q.Encode()
+	}
+
+	if r.Body != nil {
+		req.Header[headerContentType] = headerContentTypeJSON
 	}
 
 	if len(r.Header) > 0 {
@@ -153,6 +155,14 @@ func (f FieldCaps) WithContext(v context.Context) func(*FieldCapsRequest) {
 	}
 }
 
+// WithBody - Field json objects containing an array of field names.
+//
+func (f FieldCaps) WithBody(v io.Reader) func(*FieldCapsRequest) {
+	return func(r *FieldCapsRequest) {
+		r.Body = v
+	}
+}
+
 // WithIndex - a list of index names; use _all to perform the operation on all indices.
 //
 func (f FieldCaps) WithIndex(v ...string) func(*FieldCapsRequest) {
@@ -190,14 +200,6 @@ func (f FieldCaps) WithFields(v ...string) func(*FieldCapsRequest) {
 func (f FieldCaps) WithIgnoreUnavailable(v bool) func(*FieldCapsRequest) {
 	return func(r *FieldCapsRequest) {
 		r.IgnoreUnavailable = &v
-	}
-}
-
-// WithIncludeUnmapped - indicates whether unmapped fields should be included in the response..
-//
-func (f FieldCaps) WithIncludeUnmapped(v bool) func(*FieldCapsRequest) {
-	return func(r *FieldCapsRequest) {
-		r.IncludeUnmapped = &v
 	}
 }
 

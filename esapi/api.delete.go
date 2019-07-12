@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -37,6 +37,7 @@ type DeleteRequest struct {
 
 	IfPrimaryTerm       *int
 	IfSeqNo             *int
+	Parent              string
 	Refresh             string
 	Routing             string
 	Timeout             time.Duration
@@ -72,10 +73,8 @@ func (r DeleteRequest) Do(ctx context.Context, transport Transport) (*Response, 
 	path.Grow(1 + len(r.Index) + 1 + len(r.DocumentType) + 1 + len(r.DocumentID))
 	path.WriteString("/")
 	path.WriteString(r.Index)
-	if r.DocumentType != "" {
-		path.WriteString("/")
-		path.WriteString(r.DocumentType)
-	}
+	path.WriteString("/")
+	path.WriteString(r.DocumentType)
 	path.WriteString("/")
 	path.WriteString(r.DocumentID)
 
@@ -87,6 +86,10 @@ func (r DeleteRequest) Do(ctx context.Context, transport Transport) (*Response, 
 
 	if r.IfSeqNo != nil {
 		params["if_seq_no"] = strconv.FormatInt(int64(*r.IfSeqNo), 10)
+	}
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
 	}
 
 	if r.Refresh != "" {
@@ -198,6 +201,14 @@ func (f Delete) WithIfPrimaryTerm(v int) func(*DeleteRequest) {
 func (f Delete) WithIfSeqNo(v int) func(*DeleteRequest) {
 	return func(r *DeleteRequest) {
 		r.IfSeqNo = &v
+	}
+}
+
+// WithParent - ID of parent document.
+//
+func (f Delete) WithParent(v string) func(*DeleteRequest) {
+	return func(r *DeleteRequest) {
+		r.Parent = v
 	}
 }
 

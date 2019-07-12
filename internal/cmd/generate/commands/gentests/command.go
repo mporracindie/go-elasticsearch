@@ -15,8 +15,8 @@ import (
 	"github.com/spf13/cobra"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/elastic/go-elasticsearch/v8/internal/cmd/generate/commands"
-	"github.com/elastic/go-elasticsearch/v8/internal/cmd/generate/utils"
+	"github.com/elastic/go-elasticsearch/v6/internal/cmd/generate/commands"
+	"github.com/elastic/go-elasticsearch/v6/internal/cmd/generate/utils"
 )
 
 var (
@@ -126,33 +126,9 @@ func (cmd *Command) Execute() error {
 	}{start: time.Now()}
 
 	for _, fpath := range inputFiles {
-		var skip bool
-
 		if filepath.Ext(fpath) != ".yml" && filepath.Ext(fpath) != ".yaml" {
-			skip = true
-		}
-
-		for _, skipFile := range skipFiles {
-			if strings.HasSuffix(fpath, skipFile) {
-				if utils.IsTTY() {
-					fmt.Fprint(os.Stderr, "\x1b[2m")
-				}
-				fmt.Fprintln(os.Stderr, strings.Repeat("━", utils.TerminalWidth()))
-				if utils.IsTTY() {
-					fmt.Fprint(os.Stderr, "\x1b[0;33m")
-				}
-				fmt.Fprintf(os.Stderr, "Skipping %q\n", fpath)
-				if utils.IsTTY() {
-					fmt.Fprint(os.Stderr, "\x1b[0m")
-				}
-				skip = true
-			}
-		}
-
-		if skip {
 			continue
 		}
-
 		if err := cmd.processFile(fpath); err != nil {
 			return fmt.Errorf("Processing file %q: %s", fpath, err)
 		}

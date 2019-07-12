@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/elastic/go-elasticsearch/v6"
+	"github.com/elastic/go-elasticsearch/v6/esapi"
 	"github.com/fatih/color"
 	"github.com/mailru/easyjson"
 
-	"github.com/elastic/go-elasticsearch/v8/_examples/encoding/model"
+	"github.com/elastic/go-elasticsearch/v6/_examples/encoding/model"
 )
 
 var (
@@ -128,7 +128,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	faint.Printf("[%s] took=%d total=%d\n", res.Status(), sr.Took, sr.Hits.Total.Value)
+	faint.Printf("[%s] took=%d total=%d\n", res.Status(), sr.Took, sr.Hits.Total)
 	faint.Println(strings.Repeat("─", 80))
 
 	for _, h := range sr.Hits.Hits {

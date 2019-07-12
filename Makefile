@@ -40,7 +40,7 @@ test-api:  ## Run generated API integration tests
 ifdef race
 	$(eval testapiargs += "-race")
 endif
-	$(eval testapiargs += "-cover" "-coverpkg=github.com/elastic/go-elasticsearch/v8/esapi" "-coverprofile=$(PWD)/tmp/integration-api.cov" "-tags='integration'" "-timeout=1h")
+	$(eval testapiargs += "-cover" "-coverpkg=github.com/elastic/go-elasticsearch/v6/esapi" "-coverprofile=$(PWD)/tmp/integration-api.cov" "-tags='integration'" "-timeout=1h")
 ifdef flavor
 else
 	$(eval flavor='core')
@@ -226,7 +226,7 @@ godoc: ## Display documentation for the package
 	GOROOT=/tmp/tmpgoroot/ GOPATH=/tmp/tmpgopath/ godoc -http=localhost:6060 -play
 
 cluster: ## Launch an Elasticsearch cluster with Docker
-	$(eval version ?= "elasticsearch-oss:8.0.0-SNAPSHOT")
+	$(eval version ?= "elasticsearch-oss:6.8-SNAPSHOT")
 ifeq ($(origin nodes), undefined)
 	$(eval nodes = 1)
 endif
@@ -269,9 +269,8 @@ endif
 				--network elasticsearch \
 				--env "node.name=es$$n" \
 				--env "cluster.name=go-elasticsearch" \
-				--env "cluster.initial_master_nodes=es1" \
-				--env "discovery.seed_hosts=es1" \
 				--env "cluster.routing.allocation.disk.threshold_enabled=false" \
+				--env "discovery.zen.ping.unicast.hosts=es1" \
 				--env "bootstrap.memory_lock=true" \
 				--env "node.attr.testattr=test" \
 				--env "path.repo=/tmp" \
@@ -302,7 +301,7 @@ ifdef detached
 endif
 
 cluster-update: ## Update the Docker image
-	$(eval version ?= "elasticsearch-oss:8.0.0-SNAPSHOT")
+	$(eval version ?= "elasticsearch-oss:6.8-SNAPSHOT")
 	@echo "\033[2m→ Updating the Docker image...\033[0m"
 	@docker pull docker.elastic.co/elasticsearch/$(version);
 

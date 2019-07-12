@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -31,11 +31,11 @@ type Msearch func(body io.Reader, o ...func(*MsearchRequest)) (*Response, error)
 // MsearchRequest configures the Msearch API request.
 //
 type MsearchRequest struct {
-	Index []string
+	Index        []string
+	DocumentType []string
 
 	Body io.Reader
 
-	CcsMinimizeRoundtrips      *bool
 	MaxConcurrentSearches      *int
 	MaxConcurrentShardRequests *int
 	PreFilterShardSize         *int
@@ -64,19 +64,19 @@ func (r MsearchRequest) Do(ctx context.Context, transport Transport) (*Response,
 
 	method = "GET"
 
-	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_msearch"))
+	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len(strings.Join(r.DocumentType, ",")) + 1 + len("_msearch"))
 	if len(r.Index) > 0 {
 		path.WriteString("/")
 		path.WriteString(strings.Join(r.Index, ","))
+	}
+	if len(r.DocumentType) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.DocumentType, ","))
 	}
 	path.WriteString("/")
 	path.WriteString("_msearch")
 
 	params = make(map[string]string)
-
-	if r.CcsMinimizeRoundtrips != nil {
-		params["ccs_minimize_roundtrips"] = strconv.FormatBool(*r.CcsMinimizeRoundtrips)
-	}
 
 	if r.MaxConcurrentSearches != nil {
 		params["max_concurrent_searches"] = strconv.FormatInt(int64(*r.MaxConcurrentSearches), 10)
@@ -178,11 +178,11 @@ func (f Msearch) WithIndex(v ...string) func(*MsearchRequest) {
 	}
 }
 
-// WithCcsMinimizeRoundtrips - indicates whether network round-trips should be minimized as part of cross-cluster search requests execution.
+// WithDocumentType - a list of document types to use as default.
 //
-func (f Msearch) WithCcsMinimizeRoundtrips(v bool) func(*MsearchRequest) {
+func (f Msearch) WithDocumentType(v ...string) func(*MsearchRequest) {
 	return func(r *MsearchRequest) {
-		r.CcsMinimizeRoundtrips = &v
+		r.DocumentType = v
 	}
 }
 
@@ -194,7 +194,7 @@ func (f Msearch) WithMaxConcurrentSearches(v int) func(*MsearchRequest) {
 	}
 }
 
-// WithMaxConcurrentShardRequests - the number of concurrent shard requests each sub search executes concurrently per node. this value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
+// WithMaxConcurrentShardRequests - the number of concurrent shard requests each sub search executes concurrently. this value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
 //
 func (f Msearch) WithMaxConcurrentShardRequests(v int) func(*MsearchRequest) {
 	return func(r *MsearchRequest) {
@@ -210,7 +210,7 @@ func (f Msearch) WithPreFilterShardSize(v int) func(*MsearchRequest) {
 	}
 }
 
-// WithRestTotalHitsAsInt - indicates whether hits.total should be rendered as an integer or an object in the rest search response.
+// WithRestTotalHitsAsInt - this parameter is ignored in this version. it is used in the next major version to control whether the rest response should render the total.hits as an object or a number.
 //
 func (f Msearch) WithRestTotalHitsAsInt(v bool) func(*MsearchRequest) {
 	return func(r *MsearchRequest) {

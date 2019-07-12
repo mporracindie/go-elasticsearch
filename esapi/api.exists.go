@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -34,6 +34,7 @@ type ExistsRequest struct {
 	DocumentType string
 	DocumentID   string
 
+	Parent         string
 	Preference     string
 	Realtime       *bool
 	Refresh        *bool
@@ -73,14 +74,16 @@ func (r ExistsRequest) Do(ctx context.Context, transport Transport) (*Response, 
 	path.Grow(1 + len(r.Index) + 1 + len(r.DocumentType) + 1 + len(r.DocumentID))
 	path.WriteString("/")
 	path.WriteString(r.Index)
-	if r.DocumentType != "" {
-		path.WriteString("/")
-		path.WriteString(r.DocumentType)
-	}
+	path.WriteString("/")
+	path.WriteString(r.DocumentType)
 	path.WriteString("/")
 	path.WriteString(r.DocumentID)
 
 	params = make(map[string]string)
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
+	}
 
 	if r.Preference != "" {
 		params["preference"] = r.Preference
@@ -191,6 +194,14 @@ func (f Exists) WithContext(v context.Context) func(*ExistsRequest) {
 func (f Exists) WithDocumentType(v string) func(*ExistsRequest) {
 	return func(r *ExistsRequest) {
 		r.DocumentType = v
+	}
+}
+
+// WithParent - the ID of the parent document.
+//
+func (f Exists) WithParent(v string) func(*ExistsRequest) {
+	return func(r *ExistsRequest) {
+		r.Parent = v
 	}
 }
 

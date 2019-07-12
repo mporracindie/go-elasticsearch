@@ -39,11 +39,11 @@ The `master` branch of the client is compatible with the current `master` branch
 
 Add the package to your `go.mod` file:
 
-    require github.com/elastic/go-elasticsearch/v8 master
+    require github.com/elastic/go-elasticsearch/v6 6.x
 
 Or, clone the repository:
 
-    git clone --branch master https://github.com/elastic/go-elasticsearch.git $GOPATH/src/github.com/elastic/go-elasticsearch
+    git clone --branch 6.x https://github.com/elastic/go-elasticsearch.git $GOPATH/src/github.com/elastic/go-elasticsearch
 
 A complete example:
 
@@ -53,7 +53,7 @@ mkdir my-elasticsearch-app && cd my-elasticsearch-app
 cat > go.mod <<-END
   module my-elasticsearch-app
 
-  require github.com/elastic/go-elasticsearch/v8 master
+  require github.com/elastic/go-elasticsearch/v6 6.x
 END
 
 cat > main.go <<-END
@@ -62,7 +62,7 @@ cat > main.go <<-END
   import (
     "log"
 
-    "github.com/elastic/go-elasticsearch/v8"
+    "github.com/elastic/go-elasticsearch/v6"
   )
 
   func main() {
@@ -160,8 +160,8 @@ import (
   "strings"
   "sync"
 
-  "github.com/elastic/go-elasticsearch/v8"
-  "github.com/elastic/go-elasticsearch/v8/esapi"
+  "github.com/elastic/go-elasticsearch/v6"
+  "github.com/elastic/go-elasticsearch/v6/esapi"
 )
 
 func main() {
@@ -296,7 +296,7 @@ func main() {
   log.Printf(
     "[%s] %d hits; took: %dms",
     res.Status(),
-    int(r["hits"].(map[string]interface{})["total"].(map[string]interface{})["value"].(float64)),
+    int(r["hits"].(map[string]interface{})["total"].(float64)),
     int(r["took"].(float64)),
   )
   // Print the ID and document source for each hit.
@@ -307,8 +307,8 @@ func main() {
   log.Println(strings.Repeat("=", 37))
 }
 
-// Client: 8.0.0-SNAPSHOT
-// Server: 8.0.0-SNAPSHOT
+// Client: 6.7.0-SNAPSHOT
+// Server: 6.7.2
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // [201 Created] updated; version=1
 // [201 Created] updated; version=1

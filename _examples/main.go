@@ -16,8 +16,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/elastic/go-elasticsearch/v6"
+	"github.com/elastic/go-elasticsearch/v6/esapi"
 )
 
 func main() {
@@ -152,7 +152,7 @@ func main() {
 	log.Printf(
 		"[%s] %d hits; took: %dms",
 		res.Status(),
-		int(r["hits"].(map[string]interface{})["total"].(map[string]interface{})["value"].(float64)),
+		int(r["hits"].(map[string]interface{})["total"].(float64)),
 		int(r["took"].(float64)),
 	)
 	// Print the ID and document source for each hit.

@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -23,7 +23,7 @@ func newNodesReloadSecureSettingsFunc(t Transport) NodesReloadSecureSettings {
 
 // NodesReloadSecureSettings reloads secure settings.
 //
-// See full documentation at https://www.elastic.co/guide/en/elasticsearch/reference/master/secure-settings.html#reloadable-secure-settings.
+// See full documentation at https://www.elastic.co/guide/en/elasticsearch/reference/6.x/secure-settings.html#reloadable-secure-settings.
 //
 type NodesReloadSecureSettings func(o ...func(*NodesReloadSecureSettingsRequest)) (*Response, error)
 

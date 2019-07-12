@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -9,8 +9,8 @@ import (
 )
 
 func newCCRFollowStatsFunc(t Transport) CCRFollowStats {
-	return func(index []string, o ...func(*CCRFollowStatsRequest)) (*Response, error) {
-		var r = CCRFollowStatsRequest{Index: index}
+	return func(o ...func(*CCRFollowStatsRequest)) (*Response, error) {
+		var r = CCRFollowStatsRequest{}
 		for _, f := range o {
 			f(&r)
 		}
@@ -22,7 +22,7 @@ func newCCRFollowStatsFunc(t Transport) CCRFollowStats {
 
 // CCRFollowStats - https://www.elastic.co/guide/en/elasticsearch/reference/current/ccr-get-follow-stats.html
 //
-type CCRFollowStats func(index []string, o ...func(*CCRFollowStatsRequest)) (*Response, error)
+type CCRFollowStats func(o ...func(*CCRFollowStatsRequest)) (*Response, error)
 
 // CCRFollowStatsRequest configures the CCR Follow Stats API request.
 //
@@ -51,8 +51,10 @@ func (r CCRFollowStatsRequest) Do(ctx context.Context, transport Transport) (*Re
 	method = "GET"
 
 	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_ccr") + 1 + len("stats"))
-	path.WriteString("/")
-	path.WriteString(strings.Join(r.Index, ","))
+	if len(r.Index) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.Index, ","))
+	}
 	path.WriteString("/")
 	path.WriteString("_ccr")
 	path.WriteString("/")
@@ -121,6 +123,14 @@ func (r CCRFollowStatsRequest) Do(ctx context.Context, transport Transport) (*Re
 func (f CCRFollowStats) WithContext(v context.Context) func(*CCRFollowStatsRequest) {
 	return func(r *CCRFollowStatsRequest) {
 		r.ctx = v
+	}
+}
+
+// WithIndex - a list of index patterns; use `_all` to perform the operation on all indices.
+//
+func (f CCRFollowStats) WithIndex(v ...string) func(*CCRFollowStatsRequest) {
+	return func(r *CCRFollowStatsRequest) {
+		r.Index = v
 	}
 }
 

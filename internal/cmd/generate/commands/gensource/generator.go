@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/tools/imports"
 
-	"github.com/elastic/go-elasticsearch/v8/internal/cmd/generate/utils"
+	"github.com/elastic/go-elasticsearch/v6/internal/cmd/generate/utils"
 )
 
 // Generator represents the "gensource" generator.
@@ -217,6 +217,10 @@ type ` + g.Endpoint.MethodWithNamespace() + `Request struct {`)
 	}
 
 	for _, name := range g.Endpoint.URL.ParamNamesSorted {
+		if name == "human" {
+			continue
+		}
+
 		p, ok := g.Endpoint.URL.Params[name]
 		if !ok {
 			panic(fmt.Sprintf("Parameter %q not found", name))
@@ -361,6 +365,9 @@ func (f ` + g.Endpoint.MethodWithNamespace() + `) WithBody(v io.Reader) func(*` 
 
 	// Generate With... methods for params
 	for _, pName := range g.Endpoint.URL.ParamNamesSorted {
+		if pName == "human" {
+			continue
+		}
 		if _, ok := g.Endpoint.URL.Parts[pName]; ok {
 			continue // skip params which are also parts
 		}
@@ -560,7 +567,7 @@ func (r ` + g.Endpoint.MethodWithNamespace() + `Request) Do(ctx context.Context,
 							p = a.GoName()
 
 							switch a.Type {
-							case "string":
+							case "string", "enum":
 								pathGrow.WriteString(`1 + len(r.` + p + `) + `)
 								pathContent.WriteString(`	if r.` + p + ` != "" {` + "\n")
 								pathContent.WriteString(`		path.WriteString("/")` + "\n")
@@ -629,6 +636,10 @@ func (r ` + g.Endpoint.MethodWithNamespace() + `Request) Do(ctx context.Context,
 	g.w(`
 	params = make(map[string]string)` + "\n")
 	for _, n := range g.Endpoint.URL.ParamNamesSorted {
+		if n == "human" {
+			continue
+		}
+
 		if p, ok := g.Endpoint.URL.Params[n]; ok {
 			var (
 				fieldName      string

@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -36,6 +36,7 @@ type BulkRequest struct {
 
 	Body io.Reader
 
+	Fields              []string
 	Pipeline            string
 	Refresh             string
 	Routing             string
@@ -79,6 +80,10 @@ func (r BulkRequest) Do(ctx context.Context, transport Transport) (*Response, er
 	path.WriteString("_bulk")
 
 	params = make(map[string]string)
+
+	if len(r.Fields) > 0 {
+		params["fields"] = strings.Join(r.Fields, ",")
+	}
 
 	if r.Pipeline != "" {
 		params["pipeline"] = r.Pipeline
@@ -197,6 +202,14 @@ func (f Bulk) WithIndex(v string) func(*BulkRequest) {
 func (f Bulk) WithDocumentType(v string) func(*BulkRequest) {
 	return func(r *BulkRequest) {
 		r.DocumentType = v
+	}
+}
+
+// WithFields - default comma-separated list of fields to return in the response for updates, can be overridden on each sub-request.
+//
+func (f Bulk) WithFields(v ...string) func(*BulkRequest) {
+	return func(r *BulkRequest) {
+		r.Fields = v
 	}
 }
 

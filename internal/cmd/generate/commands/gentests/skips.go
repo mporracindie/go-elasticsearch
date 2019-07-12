@@ -60,15 +60,9 @@ cluster.reroute/11_explain.yml:
 nodes.info/30_settings.yml:
 nodes.stats/20_response_filtering.yml:
 nodes.stats/30_discovery.yml:
-  - Discovery stats
+ - Discovery stats
 nodes.discovery/30_discovery.yml:
-  - Discovery stats
-
-# Arbitrary key
-indices.shrink/10_basic.yml:
-indices.shrink/20_source_mapping.yml:
-indices.shrink/30_copy_settings.yml:
-indices.split/30_copy_settings.yml:
+ - Discovery stats
 
 # Parsed response is YAML: value is map[interface {}]interface {}, not map[string]interface {}
 cat.aliases/20_headers.yml:

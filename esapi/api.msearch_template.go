@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -31,11 +31,11 @@ type MsearchTemplate func(body io.Reader, o ...func(*MsearchTemplateRequest)) (*
 // MsearchTemplateRequest configures the Msearch Template API request.
 //
 type MsearchTemplateRequest struct {
-	Index []string
+	Index        []string
+	DocumentType []string
 
 	Body io.Reader
 
-	CcsMinimizeRoundtrips *bool
 	MaxConcurrentSearches *int
 	RestTotalHitsAsInt    *bool
 	SearchType            string
@@ -62,10 +62,14 @@ func (r MsearchTemplateRequest) Do(ctx context.Context, transport Transport) (*R
 
 	method = "GET"
 
-	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_msearch") + 1 + len("template"))
+	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len(strings.Join(r.DocumentType, ",")) + 1 + len("_msearch") + 1 + len("template"))
 	if len(r.Index) > 0 {
 		path.WriteString("/")
 		path.WriteString(strings.Join(r.Index, ","))
+	}
+	if len(r.DocumentType) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.DocumentType, ","))
 	}
 	path.WriteString("/")
 	path.WriteString("_msearch")
@@ -73,10 +77,6 @@ func (r MsearchTemplateRequest) Do(ctx context.Context, transport Transport) (*R
 	path.WriteString("template")
 
 	params = make(map[string]string)
-
-	if r.CcsMinimizeRoundtrips != nil {
-		params["ccs_minimize_roundtrips"] = strconv.FormatBool(*r.CcsMinimizeRoundtrips)
-	}
 
 	if r.MaxConcurrentSearches != nil {
 		params["max_concurrent_searches"] = strconv.FormatInt(int64(*r.MaxConcurrentSearches), 10)
@@ -170,11 +170,11 @@ func (f MsearchTemplate) WithIndex(v ...string) func(*MsearchTemplateRequest) {
 	}
 }
 
-// WithCcsMinimizeRoundtrips - indicates whether network round-trips should be minimized as part of cross-cluster search requests execution.
+// WithDocumentType - a list of document types to use as default.
 //
-func (f MsearchTemplate) WithCcsMinimizeRoundtrips(v bool) func(*MsearchTemplateRequest) {
+func (f MsearchTemplate) WithDocumentType(v ...string) func(*MsearchTemplateRequest) {
 	return func(r *MsearchTemplateRequest) {
-		r.CcsMinimizeRoundtrips = &v
+		r.DocumentType = v
 	}
 }
 
@@ -186,7 +186,7 @@ func (f MsearchTemplate) WithMaxConcurrentSearches(v int) func(*MsearchTemplateR
 	}
 }
 
-// WithRestTotalHitsAsInt - indicates whether hits.total should be rendered as an integer or an object in the rest search response.
+// WithRestTotalHitsAsInt - this parameter is ignored in this version. it is used in the next major version to control whether the rest response should render the total.hits as an object or a number.
 //
 func (f MsearchTemplate) WithRestTotalHitsAsInt(v bool) func(*MsearchTemplateRequest) {
 	return func(r *MsearchTemplateRequest) {

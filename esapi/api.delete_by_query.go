@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -32,7 +32,8 @@ type DeleteByQuery func(index []string, body io.Reader, o ...func(*DeleteByQuery
 // DeleteByQueryRequest configures the Delete By Query API request.
 //
 type DeleteByQueryRequest struct {
-	Index []string
+	Index        []string
+	DocumentType []string
 
 	Body io.Reader
 
@@ -46,7 +47,6 @@ type DeleteByQueryRequest struct {
 	From                *int
 	IgnoreUnavailable   *bool
 	Lenient             *bool
-	MaxDocs             *int
 	Preference          string
 	Query               string
 	Refresh             *bool
@@ -57,6 +57,7 @@ type DeleteByQueryRequest struct {
 	ScrollSize          *int
 	SearchTimeout       time.Duration
 	SearchType          string
+	Size                *int
 	Slices              *int
 	Sort                []string
 	Source              []string
@@ -90,9 +91,13 @@ func (r DeleteByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 
 	method = "POST"
 
-	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_delete_by_query"))
+	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len(strings.Join(r.DocumentType, ",")) + 1 + len("_delete_by_query"))
 	path.WriteString("/")
 	path.WriteString(strings.Join(r.Index, ","))
+	if len(r.DocumentType) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.DocumentType, ","))
+	}
 	path.WriteString("/")
 	path.WriteString("_delete_by_query")
 
@@ -138,10 +143,6 @@ func (r DeleteByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 		params["lenient"] = strconv.FormatBool(*r.Lenient)
 	}
 
-	if r.MaxDocs != nil {
-		params["max_docs"] = strconv.FormatInt(int64(*r.MaxDocs), 10)
-	}
-
 	if r.Preference != "" {
 		params["preference"] = r.Preference
 	}
@@ -180,6 +181,10 @@ func (r DeleteByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 
 	if r.SearchType != "" {
 		params["search_type"] = r.SearchType
+	}
+
+	if r.Size != nil {
+		params["size"] = strconv.FormatInt(int64(*r.Size), 10)
 	}
 
 	if r.Slices != nil {
@@ -294,6 +299,14 @@ func (f DeleteByQuery) WithContext(v context.Context) func(*DeleteByQueryRequest
 	}
 }
 
+// WithDocumentType - a list of document types to search; leave empty to perform the operation on all types.
+//
+func (f DeleteByQuery) WithDocumentType(v ...string) func(*DeleteByQueryRequest) {
+	return func(r *DeleteByQueryRequest) {
+		r.DocumentType = v
+	}
+}
+
 // WithAllowNoIndices - whether to ignore if a wildcard indices expression resolves into no concrete indices. (this includes `_all` string or when no indices have been specified).
 //
 func (f DeleteByQuery) WithAllowNoIndices(v bool) func(*DeleteByQueryRequest) {
@@ -374,14 +387,6 @@ func (f DeleteByQuery) WithLenient(v bool) func(*DeleteByQueryRequest) {
 	}
 }
 
-// WithMaxDocs - maximum number of documents to process (default: all documents).
-//
-func (f DeleteByQuery) WithMaxDocs(v int) func(*DeleteByQueryRequest) {
-	return func(r *DeleteByQueryRequest) {
-		r.MaxDocs = &v
-	}
-}
-
 // WithPreference - specify the node or shard the operation should be performed on (default: random).
 //
 func (f DeleteByQuery) WithPreference(v string) func(*DeleteByQueryRequest) {
@@ -459,6 +464,14 @@ func (f DeleteByQuery) WithSearchTimeout(v time.Duration) func(*DeleteByQueryReq
 func (f DeleteByQuery) WithSearchType(v string) func(*DeleteByQueryRequest) {
 	return func(r *DeleteByQueryRequest) {
 		r.SearchType = v
+	}
+}
+
+// WithSize - number of hits to return (default: 10).
+//
+func (f DeleteByQuery) WithSize(v int) func(*DeleteByQueryRequest) {
+	return func(r *DeleteByQueryRequest) {
+		r.Size = &v
 	}
 }
 

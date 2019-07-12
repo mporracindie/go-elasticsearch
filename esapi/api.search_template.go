@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -32,23 +32,23 @@ type SearchTemplate func(body io.Reader, o ...func(*SearchTemplateRequest)) (*Re
 // SearchTemplateRequest configures the Search Template API request.
 //
 type SearchTemplateRequest struct {
-	Index []string
+	Index        []string
+	DocumentType []string
 
 	Body io.Reader
 
-	AllowNoIndices        *bool
-	CcsMinimizeRoundtrips *bool
-	ExpandWildcards       string
-	Explain               *bool
-	IgnoreThrottled       *bool
-	IgnoreUnavailable     *bool
-	Preference            string
-	Profile               *bool
-	RestTotalHitsAsInt    *bool
-	Routing               []string
-	Scroll                time.Duration
-	SearchType            string
-	TypedKeys             *bool
+	AllowNoIndices     *bool
+	ExpandWildcards    string
+	Explain            *bool
+	IgnoreThrottled    *bool
+	IgnoreUnavailable  *bool
+	Preference         string
+	Profile            *bool
+	RestTotalHitsAsInt *bool
+	Routing            []string
+	Scroll             time.Duration
+	SearchType         string
+	TypedKeys          *bool
 
 	Pretty     bool
 	Human      bool
@@ -71,10 +71,14 @@ func (r SearchTemplateRequest) Do(ctx context.Context, transport Transport) (*Re
 
 	method = "GET"
 
-	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_search") + 1 + len("template"))
+	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len(strings.Join(r.DocumentType, ",")) + 1 + len("_search") + 1 + len("template"))
 	if len(r.Index) > 0 {
 		path.WriteString("/")
 		path.WriteString(strings.Join(r.Index, ","))
+	}
+	if len(r.DocumentType) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.DocumentType, ","))
 	}
 	path.WriteString("/")
 	path.WriteString("_search")
@@ -85,10 +89,6 @@ func (r SearchTemplateRequest) Do(ctx context.Context, transport Transport) (*Re
 
 	if r.AllowNoIndices != nil {
 		params["allow_no_indices"] = strconv.FormatBool(*r.AllowNoIndices)
-	}
-
-	if r.CcsMinimizeRoundtrips != nil {
-		params["ccs_minimize_roundtrips"] = strconv.FormatBool(*r.CcsMinimizeRoundtrips)
 	}
 
 	if r.ExpandWildcards != "" {
@@ -211,19 +211,19 @@ func (f SearchTemplate) WithIndex(v ...string) func(*SearchTemplateRequest) {
 	}
 }
 
+// WithDocumentType - a list of document types to search; leave empty to perform the operation on all types.
+//
+func (f SearchTemplate) WithDocumentType(v ...string) func(*SearchTemplateRequest) {
+	return func(r *SearchTemplateRequest) {
+		r.DocumentType = v
+	}
+}
+
 // WithAllowNoIndices - whether to ignore if a wildcard indices expression resolves into no concrete indices. (this includes `_all` string or when no indices have been specified).
 //
 func (f SearchTemplate) WithAllowNoIndices(v bool) func(*SearchTemplateRequest) {
 	return func(r *SearchTemplateRequest) {
 		r.AllowNoIndices = &v
-	}
-}
-
-// WithCcsMinimizeRoundtrips - indicates whether network round-trips should be minimized as part of cross-cluster search requests execution.
-//
-func (f SearchTemplate) WithCcsMinimizeRoundtrips(v bool) func(*SearchTemplateRequest) {
-	return func(r *SearchTemplateRequest) {
-		r.CcsMinimizeRoundtrips = &v
 	}
 }
 
@@ -275,7 +275,7 @@ func (f SearchTemplate) WithProfile(v bool) func(*SearchTemplateRequest) {
 	}
 }
 
-// WithRestTotalHitsAsInt - indicates whether hits.total should be rendered as an integer or an object in the rest search response.
+// WithRestTotalHitsAsInt - this parameter is ignored in this version. it is used in the next major version to control whether the rest response should render the total.hits as an object or a number.
 //
 func (f SearchTemplate) WithRestTotalHitsAsInt(v bool) func(*SearchTemplateRequest) {
 	return func(r *SearchTemplateRequest) {

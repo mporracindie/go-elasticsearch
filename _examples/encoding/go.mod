@@ -1,15 +1,15 @@
-module github.com/elastic/go-elasticsearch/v8/_examples/encoding
+module github.com/elastic/go-elasticsearch/v6/_examples/encoding
 
 go 1.11
 
-replace github.com/elastic/go-elasticsearch/v8 => ../..
+replace github.com/elastic/go-elasticsearch/v6 => ../..
 
 require (
-	github.com/elastic/go-elasticsearch/v8 master
+	github.com/elastic/go-elasticsearch/v6 6.x
 
 	github.com/fatih/color v1.7.0
 
-	github.com/mailru/easyjson v0.0.0-20190312143242-1de009706dbe
+	github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
 	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/mattn/go-isatty v0.0.7 // indirect
 

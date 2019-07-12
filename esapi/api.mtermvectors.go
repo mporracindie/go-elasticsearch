@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -31,7 +31,8 @@ type Mtermvectors func(o ...func(*MtermvectorsRequest)) (*Response, error)
 // MtermvectorsRequest configures the Mtermvectors API request.
 //
 type MtermvectorsRequest struct {
-	Index string
+	Index        string
+	DocumentType string
 
 	Body io.Reader
 
@@ -39,6 +40,7 @@ type MtermvectorsRequest struct {
 	FieldStatistics *bool
 	Ids             []string
 	Offsets         *bool
+	Parent          string
 	Payloads        *bool
 	Positions       *bool
 	Preference      string
@@ -69,10 +71,14 @@ func (r MtermvectorsRequest) Do(ctx context.Context, transport Transport) (*Resp
 
 	method = "GET"
 
-	path.Grow(1 + len(r.Index) + 1 + len("_mtermvectors"))
+	path.Grow(1 + len(r.Index) + 1 + len(r.DocumentType) + 1 + len("_mtermvectors"))
 	if r.Index != "" {
 		path.WriteString("/")
 		path.WriteString(r.Index)
+	}
+	if r.DocumentType != "" {
+		path.WriteString("/")
+		path.WriteString(r.DocumentType)
 	}
 	path.WriteString("/")
 	path.WriteString("_mtermvectors")
@@ -93,6 +99,10 @@ func (r MtermvectorsRequest) Do(ctx context.Context, transport Transport) (*Resp
 
 	if r.Offsets != nil {
 		params["offsets"] = strconv.FormatBool(*r.Offsets)
+	}
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
 	}
 
 	if r.Payloads != nil {
@@ -211,6 +221,14 @@ func (f Mtermvectors) WithIndex(v string) func(*MtermvectorsRequest) {
 	}
 }
 
+// WithDocumentType - the type of the document..
+//
+func (f Mtermvectors) WithDocumentType(v string) func(*MtermvectorsRequest) {
+	return func(r *MtermvectorsRequest) {
+		r.DocumentType = v
+	}
+}
+
 // WithFields - a list of fields to return. applies to all returned documents unless otherwise specified in body "params" or "docs"..
 //
 func (f Mtermvectors) WithFields(v ...string) func(*MtermvectorsRequest) {
@@ -240,6 +258,14 @@ func (f Mtermvectors) WithIds(v ...string) func(*MtermvectorsRequest) {
 func (f Mtermvectors) WithOffsets(v bool) func(*MtermvectorsRequest) {
 	return func(r *MtermvectorsRequest) {
 		r.Offsets = &v
+	}
+}
+
+// WithParent - parent ID of documents. applies to all returned documents unless otherwise specified in body "params" or "docs"..
+//
+func (f Mtermvectors) WithParent(v string) func(*MtermvectorsRequest) {
+	return func(r *MtermvectorsRequest) {
+		r.Parent = v
 	}
 }
 

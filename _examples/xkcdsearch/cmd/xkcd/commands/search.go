@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v6"
 
-	"github.com/elastic/go-elasticsearch/v8/_examples/xkcdsearch"
+	"github.com/elastic/go-elasticsearch/v6/_examples/xkcdsearch"
 )
 
 func init() {

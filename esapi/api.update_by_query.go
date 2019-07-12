@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -33,7 +33,8 @@ type UpdateByQuery func(index []string, o ...func(*UpdateByQueryRequest)) (*Resp
 // UpdateByQueryRequest configures the Update By Query API request.
 //
 type UpdateByQueryRequest struct {
-	Index []string
+	Index        []string
+	DocumentType []string
 
 	Body io.Reader
 
@@ -47,7 +48,6 @@ type UpdateByQueryRequest struct {
 	From                *int
 	IgnoreUnavailable   *bool
 	Lenient             *bool
-	MaxDocs             *int
 	Pipeline            string
 	Preference          string
 	Query               string
@@ -59,6 +59,7 @@ type UpdateByQueryRequest struct {
 	ScrollSize          *int
 	SearchTimeout       time.Duration
 	SearchType          string
+	Size                *int
 	Slices              *int
 	Sort                []string
 	Source              []string
@@ -93,9 +94,13 @@ func (r UpdateByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 
 	method = "POST"
 
-	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len("_update_by_query"))
+	path.Grow(1 + len(strings.Join(r.Index, ",")) + 1 + len(strings.Join(r.DocumentType, ",")) + 1 + len("_update_by_query"))
 	path.WriteString("/")
 	path.WriteString(strings.Join(r.Index, ","))
+	if len(r.DocumentType) > 0 {
+		path.WriteString("/")
+		path.WriteString(strings.Join(r.DocumentType, ","))
+	}
 	path.WriteString("/")
 	path.WriteString("_update_by_query")
 
@@ -141,10 +146,6 @@ func (r UpdateByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 		params["lenient"] = strconv.FormatBool(*r.Lenient)
 	}
 
-	if r.MaxDocs != nil {
-		params["max_docs"] = strconv.FormatInt(int64(*r.MaxDocs), 10)
-	}
-
 	if r.Pipeline != "" {
 		params["pipeline"] = r.Pipeline
 	}
@@ -187,6 +188,10 @@ func (r UpdateByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 
 	if r.SearchType != "" {
 		params["search_type"] = r.SearchType
+	}
+
+	if r.Size != nil {
+		params["size"] = strconv.FormatInt(int64(*r.Size), 10)
 	}
 
 	if r.Slices != nil {
@@ -313,6 +318,14 @@ func (f UpdateByQuery) WithBody(v io.Reader) func(*UpdateByQueryRequest) {
 	}
 }
 
+// WithDocumentType - a list of document types to search; leave empty to perform the operation on all types.
+//
+func (f UpdateByQuery) WithDocumentType(v ...string) func(*UpdateByQueryRequest) {
+	return func(r *UpdateByQueryRequest) {
+		r.DocumentType = v
+	}
+}
+
 // WithAllowNoIndices - whether to ignore if a wildcard indices expression resolves into no concrete indices. (this includes `_all` string or when no indices have been specified).
 //
 func (f UpdateByQuery) WithAllowNoIndices(v bool) func(*UpdateByQueryRequest) {
@@ -390,14 +403,6 @@ func (f UpdateByQuery) WithIgnoreUnavailable(v bool) func(*UpdateByQueryRequest)
 func (f UpdateByQuery) WithLenient(v bool) func(*UpdateByQueryRequest) {
 	return func(r *UpdateByQueryRequest) {
 		r.Lenient = &v
-	}
-}
-
-// WithMaxDocs - maximum number of documents to process (default: all documents).
-//
-func (f UpdateByQuery) WithMaxDocs(v int) func(*UpdateByQueryRequest) {
-	return func(r *UpdateByQueryRequest) {
-		r.MaxDocs = &v
 	}
 }
 
@@ -486,6 +491,14 @@ func (f UpdateByQuery) WithSearchTimeout(v time.Duration) func(*UpdateByQueryReq
 func (f UpdateByQuery) WithSearchType(v string) func(*UpdateByQueryRequest) {
 	return func(r *UpdateByQueryRequest) {
 		r.SearchType = v
+	}
+}
+
+// WithSize - number of hits to return (default: 10).
+//
+func (f UpdateByQuery) WithSize(v int) func(*UpdateByQueryRequest) {
+	return func(r *UpdateByQueryRequest) {
+		r.Size = &v
 	}
 }
 

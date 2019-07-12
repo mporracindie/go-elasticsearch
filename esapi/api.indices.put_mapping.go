@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -43,6 +43,7 @@ type IndicesPutMappingRequest struct {
 	IncludeTypeName   *bool
 	MasterTimeout     time.Duration
 	Timeout           time.Duration
+	UpdateAllTypes    *bool
 
 	Pretty     bool
 	Human      bool
@@ -101,6 +102,10 @@ func (r IndicesPutMappingRequest) Do(ctx context.Context, transport Transport) (
 
 	if r.Timeout != 0 {
 		params["timeout"] = formatDuration(r.Timeout)
+	}
+
+	if r.UpdateAllTypes != nil {
+		params["update_all_types"] = strconv.FormatBool(*r.UpdateAllTypes)
 	}
 
 	if r.Pretty {
@@ -232,6 +237,14 @@ func (f IndicesPutMapping) WithMasterTimeout(v time.Duration) func(*IndicesPutMa
 func (f IndicesPutMapping) WithTimeout(v time.Duration) func(*IndicesPutMappingRequest) {
 	return func(r *IndicesPutMappingRequest) {
 		r.Timeout = v
+	}
+}
+
+// WithUpdateAllTypes - whether to update the mapping for all fields with the same name across all types or not.
+//
+func (f IndicesPutMapping) WithUpdateAllTypes(v bool) func(*IndicesPutMappingRequest) {
+	return func(r *IndicesPutMappingRequest) {
+		r.UpdateAllTypes = &v
 	}
 }
 

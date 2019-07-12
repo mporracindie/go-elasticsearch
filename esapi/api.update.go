@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -38,9 +38,11 @@ type UpdateRequest struct {
 
 	Body io.Reader
 
+	Fields              []string
 	IfPrimaryTerm       *int
 	IfSeqNo             *int
 	Lang                string
+	Parent              string
 	Refresh             string
 	RetryOnConflict     *int
 	Routing             string
@@ -48,6 +50,8 @@ type UpdateRequest struct {
 	SourceExcludes      []string
 	SourceIncludes      []string
 	Timeout             time.Duration
+	Version             *int
+	VersionType         string
 	WaitForActiveShards string
 
 	Pretty     bool
@@ -78,16 +82,18 @@ func (r UpdateRequest) Do(ctx context.Context, transport Transport) (*Response, 
 	path.Grow(1 + len(r.Index) + 1 + len(r.DocumentType) + 1 + len(r.DocumentID) + 1 + len("_update"))
 	path.WriteString("/")
 	path.WriteString(r.Index)
-	if r.DocumentType != "" {
-		path.WriteString("/")
-		path.WriteString(r.DocumentType)
-	}
+	path.WriteString("/")
+	path.WriteString(r.DocumentType)
 	path.WriteString("/")
 	path.WriteString(r.DocumentID)
 	path.WriteString("/")
 	path.WriteString("_update")
 
 	params = make(map[string]string)
+
+	if len(r.Fields) > 0 {
+		params["fields"] = strings.Join(r.Fields, ",")
+	}
 
 	if r.IfPrimaryTerm != nil {
 		params["if_primary_term"] = strconv.FormatInt(int64(*r.IfPrimaryTerm), 10)
@@ -99,6 +105,10 @@ func (r UpdateRequest) Do(ctx context.Context, transport Transport) (*Response, 
 
 	if r.Lang != "" {
 		params["lang"] = r.Lang
+	}
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
 	}
 
 	if r.Refresh != "" {
@@ -127,6 +137,14 @@ func (r UpdateRequest) Do(ctx context.Context, transport Transport) (*Response, 
 
 	if r.Timeout != 0 {
 		params["timeout"] = formatDuration(r.Timeout)
+	}
+
+	if r.Version != nil {
+		params["version"] = strconv.FormatInt(int64(*r.Version), 10)
+	}
+
+	if r.VersionType != "" {
+		params["version_type"] = r.VersionType
 	}
 
 	if r.WaitForActiveShards != "" {
@@ -209,6 +227,14 @@ func (f Update) WithDocumentType(v string) func(*UpdateRequest) {
 	}
 }
 
+// WithFields - a list of fields to return in the response.
+//
+func (f Update) WithFields(v ...string) func(*UpdateRequest) {
+	return func(r *UpdateRequest) {
+		r.Fields = v
+	}
+}
+
 // WithIfPrimaryTerm - only perform the update operation if the last operation that has changed the document has the specified primary term.
 //
 func (f Update) WithIfPrimaryTerm(v int) func(*UpdateRequest) {
@@ -230,6 +256,14 @@ func (f Update) WithIfSeqNo(v int) func(*UpdateRequest) {
 func (f Update) WithLang(v string) func(*UpdateRequest) {
 	return func(r *UpdateRequest) {
 		r.Lang = v
+	}
+}
+
+// WithParent - ID of the parent document. is is only used for routing and when for the upsert request.
+//
+func (f Update) WithParent(v string) func(*UpdateRequest) {
+	return func(r *UpdateRequest) {
+		r.Parent = v
 	}
 }
 
@@ -286,6 +320,22 @@ func (f Update) WithSourceIncludes(v ...string) func(*UpdateRequest) {
 func (f Update) WithTimeout(v time.Duration) func(*UpdateRequest) {
 	return func(r *UpdateRequest) {
 		r.Timeout = v
+	}
+}
+
+// WithVersion - explicit version number for concurrency control.
+//
+func (f Update) WithVersion(v int) func(*UpdateRequest) {
+	return func(r *UpdateRequest) {
+		r.Version = &v
+	}
+}
+
+// WithVersionType - specific version type.
+//
+func (f Update) WithVersionType(v string) func(*UpdateRequest) {
+	return func(r *UpdateRequest) {
+		r.VersionType = v
 	}
 }
 

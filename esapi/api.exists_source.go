@@ -1,4 +1,4 @@
-// Code generated from specification version 8.0.0: DO NOT EDIT
+// Code generated from specification version 6.8.2: DO NOT EDIT
 
 package esapi
 
@@ -34,6 +34,7 @@ type ExistsSourceRequest struct {
 	DocumentType string
 	DocumentID   string
 
+	Parent         string
 	Preference     string
 	Realtime       *bool
 	Refresh        *bool
@@ -68,16 +69,18 @@ func (r ExistsSourceRequest) Do(ctx context.Context, transport Transport) (*Resp
 	path.Grow(1 + len(r.Index) + 1 + len(r.DocumentType) + 1 + len(r.DocumentID) + 1 + len("_source"))
 	path.WriteString("/")
 	path.WriteString(r.Index)
-	if r.DocumentType != "" {
-		path.WriteString("/")
-		path.WriteString(r.DocumentType)
-	}
+	path.WriteString("/")
+	path.WriteString(r.DocumentType)
 	path.WriteString("/")
 	path.WriteString(r.DocumentID)
 	path.WriteString("/")
 	path.WriteString("_source")
 
 	params = make(map[string]string)
+
+	if r.Parent != "" {
+		params["parent"] = r.Parent
+	}
 
 	if r.Preference != "" {
 		params["preference"] = r.Preference
@@ -179,11 +182,19 @@ func (f ExistsSource) WithContext(v context.Context) func(*ExistsSourceRequest) 
 	}
 }
 
-// WithDocumentType - the type of the document; deprecated and optional starting with 7.0.
+// WithDocumentType - the type of the document; use `_all` to fetch the first document matching the ID across all types.
 //
 func (f ExistsSource) WithDocumentType(v string) func(*ExistsSourceRequest) {
 	return func(r *ExistsSourceRequest) {
 		r.DocumentType = v
+	}
+}
+
+// WithParent - the ID of the parent document.
+//
+func (f ExistsSource) WithParent(v string) func(*ExistsSourceRequest) {
+	return func(r *ExistsSourceRequest) {
+		r.Parent = v
 	}
 }
 
